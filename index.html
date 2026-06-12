@@ -3,9 +3,377 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Volgrei</title>
+  <title>Volgrei — Your execution workspace</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0f0f10;
+      --bg-card: #161618;
+      --bg-card2: #1c1c1f;
+      --border: rgba(255,255,255,0.07);
+      --border-hover: rgba(255,255,255,0.14);
+      --text: #f0eeeb;
+      --text-muted: #888784;
+      --text-dim: #555452;
+      --accent: #c8f064;
+      --accent-dim: rgba(200, 240, 100, 0.08);
+      --accent-border: rgba(200, 240, 100, 0.2);
+      --radius: 14px;
+      --radius-sm: 8px;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Inter', sans-serif;
+      font-size: 16px;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* NAV */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 40px;
+      height: 60px;
+      background: rgba(15,15,16,0.85);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .nav-logo {
+      font-family: 'Syne', sans-serif;
+      font-weight: 800;
+      font-size: 20px;
+      color: var(--text);
+      text-decoration: none;
+      letter-spacing: -0.5px;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 32px;
+      list-style: none;
+    }
+
+    .nav-links a {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 14px;
+      transition: color 0.2s;
+    }
+
+    .nav-links a:hover { color: var(--text); }
+
+    .nav-cta {
+      background: var(--accent);
+      color: #0f0f10;
+      padding: 8px 18px;
+      border-radius: var(--radius-sm);
+      font-size: 14px;
+      font-weight: 600;
+      text-decoration: none;
+      transition: opacity 0.2s;
+    }
+
+    .nav-cta:hover { opacity: 0.85; }
+
+    /* HERO */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 120px 24px 80px;
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--accent-dim);
+      border: 1px solid var(--accent-border);
+      border-radius: 100px;
+      padding: 5px 14px;
+      font-size: 12px;
+      color: var(--accent);
+      font-weight: 500;
+      margin-bottom: 32px;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    .hero-badge-dot {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--accent);
+    }
+
+    .hero h1 {
+      font-family: 'Syne', sans-serif;
+      font-weight: 800;
+      font-size: clamp(48px, 8vw, 88px);
+      line-height: 1.0;
+      letter-spacing: -2px;
+      margin-bottom: 24px;
+      max-width: 800px;
+    }
+
+    .hero h1 span { color: var(--accent); }
+
+    .hero-sub {
+      font-size: clamp(16px, 2vw, 19px);
+      color: var(--text-muted);
+      max-width: 480px;
+      line-height: 1.65;
+      margin-bottom: 44px;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .btn-primary {
+      background: var(--accent);
+      color: #0f0f10;
+      padding: 13px 28px;
+      border-radius: var(--radius-sm);
+      font-size: 15px;
+      font-weight: 600;
+      text-decoration: none;
+      transition: opacity 0.2s, transform 0.15s;
+    }
+
+    .btn-primary:hover { opacity: 0.88; transform: translateY(-1px); }
+
+    .btn-ghost {
+      color: var(--text-muted);
+      padding: 13px 24px;
+      border-radius: var(--radius-sm);
+      font-size: 15px;
+      text-decoration: none;
+      border: 1px solid var(--border);
+      transition: border-color 0.2s, color 0.2s;
+    }
+
+    .btn-ghost:hover { border-color: var(--border-hover); color: var(--text); }
+
+    /* FEATURES */
+    .section {
+      padding: 100px 24px;
+      max-width: 1080px;
+      margin: 0 auto;
+    }
+
+    .section-label {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 16px;
+    }
+
+    .section-title {
+      font-family: 'Syne', sans-serif;
+      font-weight: 800;
+      font-size: clamp(30px, 4vw, 44px);
+      letter-spacing: -1px;
+      line-height: 1.1;
+      margin-bottom: 16px;
+    }
+
+    .section-sub {
+      font-size: 17px;
+      color: var(--text-muted);
+      max-width: 500px;
+      line-height: 1.65;
+      margin-bottom: 60px;
+    }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 16px;
+    }
+
+    .feature-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 28px;
+      transition: border-color 0.2s;
+    }
+
+    .feature-card:hover { border-color: var(--border-hover); }
+
+    .feature-icon {
+      width: 40px; height: 40px;
+      background: var(--accent-dim);
+      border: 1px solid var(--accent-border);
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 20px;
+      font-size: 18px;
+    }
+
+    .feature-card h3 {
+      font-size: 15px;
+      font-weight: 600;
+      margin-bottom: 8px;
+      color: var(--text);
+    }
+
+    .feature-card p {
+      font-size: 14px;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+
+    /* DIVIDER */
+    .divider {
+      width: 100%;
+      height: 1px;
+      background: var(--border);
+      max-width: 1080px;
+      margin: 0 auto;
+    }
+
+    /* CTA SECTION */
+    .cta-section {
+      padding: 120px 24px;
+      text-align: center;
+    }
+
+    .cta-section h2 {
+      font-family: 'Syne', sans-serif;
+      font-weight: 800;
+      font-size: clamp(32px, 5vw, 56px);
+      letter-spacing: -1.5px;
+      margin-bottom: 20px;
+    }
+
+    .cta-section p {
+      color: var(--text-muted);
+      font-size: 17px;
+      margin-bottom: 40px;
+    }
+
+    /* FOOTER */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 28px 40px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .footer-logo {
+      font-family: 'Syne', sans-serif;
+      font-weight: 800;
+      font-size: 16px;
+      color: var(--text-dim);
+      text-decoration: none;
+    }
+
+    footer p {
+      font-size: 13px;
+      color: var(--text-dim);
+    }
+
+    @media (max-width: 640px) {
+      nav { padding: 0 20px; }
+      .nav-links { display: none; }
+      footer { flex-direction: column; gap: 12px; text-align: center; }
+    }
+  </style>
 </head>
 <body>
-  <h1>Volgrei</h1>
+
+  <nav>
+    <a href="/" class="nav-logo">Volgrei</a>
+    <ul class="nav-links">
+      <li><a href="#features">Features</a></li>
+      <li><a href="#pricing">Pricing</a></li>
+    </ul>
+    <a href="#" class="nav-cta">Get early access</a>
+  </nav>
+
+  <section class="hero">
+    <div class="hero-badge">
+      <div class="hero-badge-dot"></div>
+      Coming soon to App Store
+    </div>
+    <h1>Work less.<br><span>Execute</span> more.</h1>
+    <p class="hero-sub">Volgrei is the execution workspace built for freelancers and independent professionals. Tasks, notes, and an AI agent — all in one place.</p>
+    <div class="hero-actions">
+      <a href="#" class="btn-primary">Get early access</a>
+      <a href="#features" class="btn-ghost">See features</a>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <section class="section" id="features">
+    <p class="section-label">Features</p>
+    <h2 class="section-title">Everything you need.<br>Nothing you don't.</h2>
+    <p class="section-sub">Designed for people who move fast and get things done independently.</p>
+
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="feature-icon">✦</div>
+        <h3>Today view</h3>
+        <p>Start every day with a focused list of what actually matters. No noise, just execution.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">◈</div>
+        <h3>Smart tasks</h3>
+        <p>Capture, prioritize, and complete. Tasks that adapt to how you work, not the other way around.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">◎</div>
+        <h3>Grei — your AI agent</h3>
+        <p>Ask, plan, delegate. Grei lives inside Volgrei and helps you think and move faster.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">⊡</div>
+        <h3>Notes</h3>
+        <p>Fast, connected notes that stay close to your work. Write, link, and reference without friction.</p>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <section class="cta-section" id="pricing">
+    <h2>Built for people<br>who ship.</h2>
+    <p>Join the waitlist. Be first when Volgrei launches.</p>
+    <a href="#" class="btn-primary">Get early access →</a>
+  </section>
+
+  <footer>
+    <a href="/" class="footer-logo">Volgrei</a>
+    <p>© 2025 Volgrei. All rights reserved.</p>
+  </footer>
+
 </body>
 </html>
